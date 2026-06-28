@@ -67,6 +67,14 @@ jobs:
             git clone $REPO_URL -b $REPO_BRANCH u-boot
             ln -sf /srcdir/u-boot $GITHUB_WORKSPACE/u-boot      
 
+      - name: Replace IP addresses recursively
+        working-directory: /srcdir
+        run: |
+          find /srcdir/u-boot/uboot-mtk-20230718-09eda825/configs -type f -name "*ax3000t*" \
+          -exec sed -i \
+          -e 's/^\(CONFIG_IPADDR="\)192\.168\.1\.1"/\1192.168.31.1"/' \
+          -e 's/^\(CONFIG_SERVERIP="\)192\.168\.1\.2"/\1192.168.31.2"/' {} \;
+
       - name: Compile U-Boot
         id: compile
         run: |
